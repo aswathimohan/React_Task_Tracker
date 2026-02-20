@@ -1,4 +1,5 @@
 import { useState } from "react";
+import TaskList from "./TaskList";
 
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
 
       <button onClick={addTask}>Add Task</button>
 
-      <ul>
+      {/* <ul>
         {tasks.map((task, index) => {
           return <li style={{ display: "flex",
           justifyContent: "space-between",
@@ -34,7 +35,8 @@ function App() {
           <button onClick={()=> deleteTask(index)}>Delete</button>
           </li>
         })}
-      </ul>
+      </ul> */}
+      <TaskList tasks={tasks} deleteTask={deleteTask} />
     </div>
   );
 }
