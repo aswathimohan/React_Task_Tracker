@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TaskList from "./TaskList";
 
 
@@ -6,15 +6,43 @@ function App() {
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
 
+  useEffect(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    }
+  }, []);
+
+  // Save tasks whenever they change
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+
   const addTask = () => {
     if (task.trim() === "") return;
 
-    setTasks([...tasks, task]);
+    const newTask = {
+      text: task,
+      completed: false,
+    };
+
+    setTasks([...tasks, newTask]);
     setTask("");
   };
 
   const deleteTask = (index) => {
     setTasks(tasks.filter((_, i) => i !== index));
+  };
+
+  const toggleComplete = (indexToToggle) => {
+    const updatedTasks = tasks.map((task, index) =>
+      index === indexToToggle
+        ? { ...task, completed: !task.completed }
+        : task
+    );
+
+    setTasks(updatedTasks);
   };
 
   return (
@@ -36,7 +64,7 @@ function App() {
           </li>
         })}
       </ul> */}
-      <TaskList tasks={tasks} deleteTask={deleteTask} />
+      <TaskList tasks={tasks} deleteTask={deleteTask} toggleComplete={toggleComplete} />
     </div>
   );
 }
